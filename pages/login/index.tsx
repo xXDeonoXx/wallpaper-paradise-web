@@ -1,8 +1,22 @@
-import { Formik } from 'formik';
-import React from 'react';
+import { Form, Formik } from 'formik';
+import React, { useContext } from 'react';
 import TextInput from '../../components/TextInput';
+import * as Yup from 'yup';
+import { AuthContext } from '../../contexts/AuthContext';
+import { parseCookies } from 'nookies';
+import { NextPageContext, NextApiRequest } from 'next';
 
 const LoginPage = () => {
+  const { signIn } = useContext(AuthContext);
+
+  const SignupSchema = Yup.object().shape({
+    email: Yup.string().email('Invalid email').required('Required'),
+    password: Yup.string()
+      .min(5, 'Too Short!')
+      .max(10, 'Too Long!')
+      .required('Password is required'),
+  });
+
   return (
     <div className='w-full h-screen flex items-center justify-center bg-gradient-to-br from-primary via-yellow to-secondary'>
       <div className='bg-white w-96 p-8 rounded-lg flex items-center justify-center flex-col'>
@@ -11,19 +25,34 @@ const LoginPage = () => {
         <p className='text-3xl font-bold mb-8'>Sign in</p>
         <Formik
           initialValues={{ email: '', password: '' }}
-          onSubmit={() => {
-            alert('submit');
+          onSubmit={async ({ email, password }) => {
+            try {
+              signIn(email, password);
+            } catch (error) {
+              console.log(error);
+            }
           }}
+          validationSchema={SignupSchema}
         >
-          {({ isSubmitting, handleSubmit }) => {
+          {({ isSubmitting, handleSubmit, errors }) => {
             return (
-              <form
+              <Form
                 action=''
                 className='flex flex-col w-full'
                 onSubmit={handleSubmit}
               >
-                <TextInput id='email' label='Email' type='email' />
-                <TextInput id='password' label='Password' type='password' />
+                <TextInput
+                  id='email'
+                  label='Email'
+                  type='email'
+                  error={errors.email}
+                />
+                <TextInput
+                  id='password'
+                  label='Password'
+                  type='password'
+                  error={errors.password}
+                />
 
                 <div className='mb-4'>
                   <span
@@ -45,13 +74,26 @@ const LoginPage = () => {
                     Submit
                   </button>
                 </div>
-              </form>
+              </Form>
             );
           }}
         </Formik>
       </div>
     </div>
   );
+};
+
+export const getServerSideProps = (ctx: any) => {
+  const { access_token } = parseCookies(ctx);
+  if (access_token) {
+    return {
+      redirect: {
+        destination: '/dashboard',
+        statusCode: 302,
+      },
+    };
+  }
+  return { props: {} };
 };
 
 export default LoginPage;
