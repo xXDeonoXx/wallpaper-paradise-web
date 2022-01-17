@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
+import { string } from 'yup/lib/locale';
 
+interface HeaderProps {
+  currentRoute?: string;
+  currentSubRoute?: string;
+}
 interface MenuProps {
   label: string;
   route: string;
   subRoutes?: { label: string; route: string }[];
 }
 
-const Header = () => {
+const Header: React.FC<HeaderProps> = ({ currentRoute, currentSubRoute }) => {
   const menus: MenuProps[] = [
     { label: 'Dashboard', route: '/admin/dashboard' },
     {
@@ -22,11 +27,12 @@ const Header = () => {
   ];
 
   interface NavItemProps {
-    selected: boolean;
+    currentRoute?: string;
+    currentSubRoute?: string;
     data: MenuProps;
   }
-  const NavItem = ({ data, selected }: NavItemProps) => {
-    const [isSelected, setIsSelected] = useState(selected);
+  const NavItem = ({ data, currentRoute, currentSubRoute }: NavItemProps) => {
+    const isSelected = currentRoute === data.route;
     return (
       <div className='relative group h-full flex items-center w-full select-none	'>
         <a
@@ -52,7 +58,11 @@ const Header = () => {
                   <div className='' role='none' key={data.toString()}>
                     <a
                       href={data.route}
-                      className='text-gray-700 block px-4 py-2 text-sm hover:bg-secondary hover:text-white'
+                      className={`text-gray-700 block px-4 py-2 text-sm  ${
+                        currentSubRoute === data.route
+                          ? 'bg-secondary text-white'
+                          : 'hover:bg-primary hover:text-white'
+                      } `}
                       role='menuitem'
                       tabIndex={-1}
                       id='menu-item-0'
@@ -75,7 +85,14 @@ const Header = () => {
         <img src={'/images/logo.png'} className='flex h-full p-2 mx-8' />
         <div className='h-full w-32 flex items-center'>
           {menus.map((menu, index) => {
-            return <NavItem data={menu} key={menu.route} selected={!index} />;
+            return (
+              <NavItem
+                data={menu}
+                key={menu.route}
+                currentRoute={currentRoute}
+                currentSubRoute={currentSubRoute}
+              />
+            );
           })}
         </div>
       </div>

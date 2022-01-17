@@ -3,7 +3,9 @@ import AdminPanelLayout from '../../../components/Layout/AdminPanelLayout';
 import { withAuth } from '../../../helpers/withAuth';
 
 const DashBoard = () => {
-  return <AdminPanelLayout>Dashboard</AdminPanelLayout>;
+  return (
+    <AdminPanelLayout currentRoute='/admin/images'>Images</AdminPanelLayout>
+  );
 };
 
 export default DashBoard;
