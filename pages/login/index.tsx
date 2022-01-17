@@ -20,8 +20,7 @@ const LoginPage = () => {
   return (
     <div className='w-full h-screen flex items-center justify-center bg-gradient-to-br from-primary via-yellow to-secondary'>
       <div className='bg-white w-96 p-8 rounded-lg flex items-center justify-center flex-col'>
-        <img src='images/logo.png' className='mb-4' />
-
+        <img src='images/logo.png' className='mb-4 h-16' />
         <p className='text-3xl font-bold mb-8'>Sign in</p>
         <Formik
           initialValues={{ email: '', password: '' }}
@@ -88,7 +87,7 @@ export const getServerSideProps = (ctx: any) => {
   if (access_token) {
     return {
       redirect: {
-        destination: '/dashboard',
+        destination: '/admin/dashboard',
         statusCode: 302,
       },
     };
