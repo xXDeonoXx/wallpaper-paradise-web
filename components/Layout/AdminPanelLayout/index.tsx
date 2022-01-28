@@ -15,7 +15,7 @@ const AdminPanelLayout: React.FC<AdminPanelLayoutProps> = ({
   return (
     <>
       <Header currentRoute={currentRoute} currentSubRoute={currentSubRoute} />
-      {children}
+      <div className='h-screen'>{children}</div>
       <Footer />
     </>
   );
