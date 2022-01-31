@@ -1,6 +1,7 @@
 import { Form, Formik } from 'formik';
 import React from 'react';
 import * as Yup from 'yup';
+import Dropdown from '../../../components/Dropdown';
 
 import AdminPanelLayout from '../../../components/Layout/AdminPanelLayout';
 import TextInput from '../../../components/TextInput';
@@ -14,11 +15,8 @@ interface CreateImageProps {
 
 const Create: React.FC<CreateImageProps> = ({ categories }) => {
   const SignupSchema = Yup.object().shape({
-    title: Yup.string().email('Invalid email').required('Required'),
-    password: Yup.string()
-      .min(5, 'Too Short!')
-      .max(10, 'Too Long!')
-      .required('Password is required'),
+    title: Yup.string().required('Title is required'),
+    category: Yup.string().required('Category is required'),
   });
 
   return (
@@ -30,8 +28,8 @@ const Create: React.FC<CreateImageProps> = ({ categories }) => {
       <div className='pt-8 h-full flex flex-col items-center'>
         <div className='w-full max-w-3xl p-8 bg-white rounded-lg'>
           <Formik
-            initialValues={{ title: '', password: '' }}
-            onSubmit={async ({ title, password }) => {
+            initialValues={{ title: '', category: '' }}
+            onSubmit={async ({ title, category }) => {
               try {
               } catch (error) {
                 console.log(error);
@@ -39,41 +37,35 @@ const Create: React.FC<CreateImageProps> = ({ categories }) => {
             }}
             validationSchema={SignupSchema}
           >
-            {({ isSubmitting, handleSubmit, errors }) => {
+            {({ isSubmitting, handleSubmit, errors, touched }) => {
               return (
                 <Form
                   action=''
                   className='flex flex-col w-full'
                   onSubmit={handleSubmit}
                 >
-                  <TextInput
-                    id='title'
-                    label='Title'
-                    type='text'
-                    error={errors.title}
-                  />
-                  <TextInput
-                    id='password'
-                    label='Password'
-                    type='password'
-                    error={errors.password}
-                  />
-                  {categories?.map((c) => {
-                    return c.name;
-                  })}
+                  <div className='flex justify-between space-x-8'>
+                    <TextInput
+                      id='title'
+                      label='Title'
+                      type='text'
+                      error={touched.title ? errors.title : ''}
+                      className='w-full'
+                    />
 
-                  <div className='mb-4'>
-                    <span
-                      className='text-secondary hover:cursor-pointer text-sm'
-                      onClick={() => {
-                        alert('forgot password');
-                      }}
-                    >
-                      Forget my password
-                    </span>
+                    <Dropdown
+                      id='category'
+                      label='Category'
+                      type='category'
+                      error={touched.category ? errors.category : ''}
+                      options={categories.map((c) => {
+                        return { label: c.name, value: c.id };
+                      })}
+                      className='w-full'
+                    />
                   </div>
 
-                  <div className='flex w-full justify-center'>
+                  <div className='flex w-full justify-center mt-8'>
                     <button
                       className='w-full py-2 rounded-lg bg-primary text-white'
                       type='submit'
