@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 import ImageHoverPreview from '../../../components/ImageHoverPreview';
 import AdminPanelLayout from '../../../components/Layout/AdminPanelLayout';
@@ -15,6 +16,11 @@ const Images = ({ images }: ImagesProps) => {
       {/* {images.map((image, index) => {
         return <p key={image.id}>{image.title}</p>;
       })} */}
+      <div className='w-full py-4 justify-end flex'>
+        <Link href={'/admin/images/create'}>
+          <a className='text-primary font-semibold'>UPLOAD IMAGE</a>
+        </Link>
+      </div>
       <Table
         data={images}
         columns={[

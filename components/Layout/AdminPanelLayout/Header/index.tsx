@@ -18,6 +18,7 @@ const Header: React.FC<HeaderProps> = ({ currentRoute, currentSubRoute }) => {
       label: 'Images',
       route: '/admin/images',
       subRoutes: [
+        { label: 'Upload Image', route: '/admin/images/create' },
         { label: 'Pending aproval', route: '/admin/images/pending-aproval' },
         { label: 'Reported', route: '/admin/images/reported' },
       ],

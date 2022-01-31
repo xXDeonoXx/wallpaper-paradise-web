@@ -22,7 +22,7 @@ const AdminPanelLayout: React.FC<AdminPanelLayoutProps> = ({
           <h1 className='text-3xl font-bold'>{title}</h1>
         </div>
       )}
-      <div className='h-screen bg-gray p-8'>{children}</div>
+      <div className='h-screen bg-gray px-8'>{children}</div>
       <Footer />
     </>
   );
