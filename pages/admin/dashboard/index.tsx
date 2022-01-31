@@ -4,7 +4,11 @@ import { withAuth } from '../../../helpers/withAuth';
 
 const DashBoard = () => {
   return (
-    <AdminPanelLayout currentRoute='/admin/dashboard' currentSubRoute=''>
+    <AdminPanelLayout
+      currentRoute='/admin/dashboard'
+      currentSubRoute=''
+      title='Dashboard'
+    >
       Dashboard
     </AdminPanelLayout>
   );

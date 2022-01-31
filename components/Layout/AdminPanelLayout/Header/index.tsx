@@ -34,7 +34,7 @@ const Header: React.FC<HeaderProps> = ({ currentRoute, currentSubRoute }) => {
   const NavItem = ({ data, currentRoute, currentSubRoute }: NavItemProps) => {
     const isSelected = currentRoute === data.route;
     return (
-      <div className='relative group h-full flex items-center w-full select-none	'>
+      <div className='relative group h-full flex items-center w-full select-none z-10'>
         <a
           href={`${data.route}`}
           className={`rounded-md px-2 mr-8 ${
