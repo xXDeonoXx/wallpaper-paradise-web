@@ -1,4 +1,4 @@
-import { Field, FieldAttributes, FieldProps } from 'formik';
+import { Field, FieldAttributes, FieldProps, FormikErrors } from 'formik';
 import React from 'react';
 import Select from 'react-select';
 
@@ -7,8 +7,9 @@ interface DropDownProps<T> {
   id: string;
   type?: React.HTMLInputTypeAttribute;
   className?: string;
-  error?: string;
+  error?: string | string[] | FormikErrors<{ value: string; label: string }>[];
   options: { value: string | number; label: string }[];
+  isMulti?: boolean;
 }
 
 const Dropdown = <T,>({
@@ -17,6 +18,7 @@ const Dropdown = <T,>({
   options,
   error,
   className,
+  isMulti,
 }: DropDownProps<T>) => {
   return (
     <div className={`col-span-6 sm:col-span-3 ${className}`}>
@@ -31,7 +33,11 @@ const Dropdown = <T,>({
           <Select
             name={field.name}
             onBlur={field.onBlur}
-            onChange={(value) => form.setFieldValue(field.name, value?.value)}
+            onChange={(value) => {
+              console.log(value);
+              form.setFieldValue(field.name, value);
+            }}
+            isMulti={isMulti}
             className={`mt-1 block w-full border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none
             focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${
               error ? 'border-red-500' : 'border-gray'
