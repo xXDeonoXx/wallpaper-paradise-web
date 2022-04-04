@@ -72,7 +72,7 @@ export default Images;
 
 export const getServerSideProps = withAuth(
   async (ctx: any): Promise<{ props: ImagesProps }> => {
-    const api = getApi();
+    const api = getApi(ctx);
     const res = await api.get(`images`);
     return { props: { images: res.data.content } };
   }
