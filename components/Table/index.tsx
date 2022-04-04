@@ -15,7 +15,7 @@ interface TableProps<T> {
 
 const Table = <T,>({ data, columns }: TableProps<T>) => {
   return (
-    <div className='w-full flex flex-col rounded-lg overflow-hidden'>
+    <div className='w-full flex flex-col rounded-lg'>
       <table className='p-4 w-full'>
         <thead className='bg-secondary text-white'>
           <tr className=''>
