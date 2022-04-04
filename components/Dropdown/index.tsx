@@ -1,5 +1,6 @@
-import { Field } from 'formik';
+import { Field, FieldAttributes, FieldProps } from 'formik';
 import React from 'react';
+import Select from 'react-select';
 
 interface DropDownProps<T> {
   label: string;
@@ -25,23 +26,41 @@ const Dropdown = <T,>({
       >
         {label}
       </label>
-      <Field
-        as={'select'}
-        id={id}
-        name={id}
-        autoComplete={id}
-        className={`mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none
-         focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${
-           error ? 'border-red-500' : 'border-gray'
-         }`}
-      >
-        {options.map((opt) => {
-          return (
-            <option key={opt as any} value={opt.value}>
-              {opt.label}
-            </option>
-          );
-        })}
+      <Field id={id} name={id} autoComplete={id}>
+        {({ field, form, meta }: FieldProps) => (
+          <Select
+            name={field.name}
+            onBlur={field.onBlur}
+            onChange={(value) => form.setFieldValue(field.name, value?.value)}
+            className={`mt-1 block w-full border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none
+            focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${
+              error ? 'border-red-500' : 'border-gray'
+            }`}
+            options={options.map((opt) => {
+              return { value: opt.value, label: opt.label };
+            })}
+            defaultValue={options.find((opt) => opt.value == meta.initialValue)}
+            styles={{
+              control: (provided, state) => ({
+                ...provided,
+                boxShadow: 'none',
+                border: 'none',
+                outline: 'none',
+              }),
+              menu: (provided, state) => ({
+                ...provided,
+                border: 'none',
+                boxShadow: 'none',
+                outline: 'none',
+              }),
+              // option: (provided, state) => ({
+              //   ...provided,
+              //   backgroundColor: state.isFocused && 'lightgray',
+              //   color: state.isFocused && 'red',
+              // }),
+            }}
+          />
+        )}
       </Field>
     </div>
   );
