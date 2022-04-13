@@ -19,6 +19,7 @@ export function withAuth(gssp: any) {
       await api.get('/users/personal-info');
       return await gssp(context); // Continue on to call `getServerSideProps` logic
     } catch (error) {
+      console.log(error);
       destroyCookie(context, 'access_token');
       return {
         redirect: {
