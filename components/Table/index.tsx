@@ -23,7 +23,7 @@ const Table = <T,>({ data, columns }: TableProps<T>) => {
               return (
                 <th
                   key={cl.label}
-                  className={`px-4 py-2 text-lg text-left ${cl.columnClassname}`}
+                  className={`px-4 py-2 text-xl text-left ${cl.columnClassname}`}
                 >
                   {cl.label}
                 </th>
@@ -34,12 +34,15 @@ const Table = <T,>({ data, columns }: TableProps<T>) => {
         <tbody className='bg-white w-full'>
           {data.map((d, index) => {
             return (
-              <tr className={` ${index % 2 ? `bg-gray` : ``}`} key={d as any}>
+              <tr
+                className={` ${index % 2 ? `bg-gray` : ``}`}
+                key={d as unknown as React.Key}
+              >
                 {columns.map((r, index) => {
                   return (
                     <td
                       key={r as any}
-                      className={`text-sm px-4 ${r.className}`}
+                      className={`text-lg px-4 ${r.className}`}
                     >
                       {r.custom
                         ? r.custom(get(d, r.property))
