@@ -16,11 +16,18 @@ const Home: NextPage<HomeProps> = ({ images }) => {
           {images.content.map((image) => {
             return (
               <div
-                className=''
+                className='relative group'
                 // style={{ backgroundImage: `url(${image.url})` }}
                 key={image.id}
               >
                 <img className='w-full object-contain' src={image.url} alt='' />
+                <div
+                  className='absolute bottom-0 
+                w-full h-16 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 
+                transition-opacity duration-200 text-white p-2'
+                >
+                  {image.title}
+                </div>
               </div>
             );
           })}
