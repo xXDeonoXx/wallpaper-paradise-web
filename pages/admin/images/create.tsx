@@ -29,11 +29,11 @@ const Create: React.FC<CreateImageProps> = ({ categories }) => {
   const [initialValues, setInitialValues] = useState<{
     title: string;
     categories: { label: string; value: number }[];
-    image: string;
+    image: File | undefined;
   }>({
     title: '',
     categories: [],
-    image: '',
+    image: undefined,
   });
 
   return (
@@ -48,9 +48,9 @@ const Create: React.FC<CreateImageProps> = ({ categories }) => {
             initialValues={initialValues}
             onSubmit={async ({ title, categories, image }) => {
               try {
-                console.log(title, categories, image);
+                if (!image) return;
                 const imageFormData = new FormData();
-                imageFormData.append('file', image, 'file');
+                imageFormData.append('file', image, image.name);
                 categories.forEach((category, index) => {
                   imageFormData.append(
                     `categories[${index}]`,
@@ -83,7 +83,6 @@ const Create: React.FC<CreateImageProps> = ({ categories }) => {
                   className='flex flex-col w-full'
                   onSubmit={handleSubmit}
                 >
-                  {JSON.stringify(values)}
                   <div className='flex w-full'>
                     <div className='flex flex-col space-y-8 w-full justify-between'>
                       <div className='space-y-8'>

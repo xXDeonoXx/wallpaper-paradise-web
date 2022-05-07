@@ -15,8 +15,8 @@ interface TableProps<T> {
 
 const Table = <T,>({ data, columns }: TableProps<T>) => {
   return (
-    <div className='w-full flex flex-col rounded-lg'>
-      <table className='p-4 w-full'>
+    <div className='w-full flex flex-col rounded-lg border border-slate-200 relative overflow-x-auto'>
+      <table className='w-full '>
         <thead className='bg-secondary text-white'>
           <tr className=''>
             {columns.map((cl) => {
@@ -35,14 +35,16 @@ const Table = <T,>({ data, columns }: TableProps<T>) => {
           {data.map((d, index) => {
             return (
               <tr
-                className={` ${index % 2 ? `bg-gray` : ``}`}
+                className={` border-b border-slate-200 ${
+                  index % 2 ? `bg-gray` : ``
+                }`}
                 key={d as unknown as React.Key}
               >
                 {columns.map((r, index) => {
                   return (
                     <td
                       key={r as any}
-                      className={`text-lg px-4 ${r.className}`}
+                      className={`text-lg px-4 py-2 ${r.className}`}
                     >
                       {r.custom
                         ? r.custom(get(d, r.property))
