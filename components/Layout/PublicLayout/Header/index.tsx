@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { string } from 'yup/lib/locale';
+import { getApi } from '../../../../services/api';
+import { Category } from '../../../../services/categories/categories.interface';
 import SearchBar from '../../../SearchBar';
 
 interface HeaderProps {
@@ -13,6 +15,8 @@ interface MenuProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ currentRoute, currentSubRoute }) => {
+  const api = getApi();
+  const [categories, setCategories] = useState<Category[]>([]);
   const menus: MenuProps[] = [
     {
       label: 'Categories',
@@ -43,7 +47,7 @@ const Header: React.FC<HeaderProps> = ({ currentRoute, currentSubRoute }) => {
           {data.label}
         </a>
 
-        {data.subRoutes && (
+        {categories && (
           <div className='pt-12'>
             <div
               className='origin-top-right absolute left-0 w-56 rounded-md overflow-hidden shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray focus:outline-none text-black hidden group-hover:block'
@@ -52,13 +56,13 @@ const Header: React.FC<HeaderProps> = ({ currentRoute, currentSubRoute }) => {
               aria-labelledby='menu-button'
               tabIndex={-1}
             >
-              {data.subRoutes.map((data) => {
+              {categories.map((category) => {
                 return (
-                  <div className='' role='none' key={data.toString()}>
+                  <div className='' role='none' key={category.toString()}>
                     <a
-                      href={data.route}
+                      href={category.name}
                       className={`text-gray-700 block px-4 py-2 text-sm  ${
-                        currentSubRoute === data.route
+                        currentSubRoute === category.name
                           ? 'bg-secondary text-white'
                           : 'hover:bg-primary hover:text-white'
                       } `}
@@ -66,7 +70,7 @@ const Header: React.FC<HeaderProps> = ({ currentRoute, currentSubRoute }) => {
                       tabIndex={-1}
                       id='menu-item-0'
                     >
-                      {data.label}
+                      {category.name}
                     </a>
                   </div>
                 );
@@ -77,6 +81,15 @@ const Header: React.FC<HeaderProps> = ({ currentRoute, currentSubRoute }) => {
       </div>
     );
   };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await api.get('/categories');
+        setCategories(res.data.content);
+      } catch (error) {}
+    })();
+  }, []);
 
   return (
     <nav className='bg-dark h-16 w-full flex justify-between text-white '>
@@ -102,7 +115,7 @@ const Header: React.FC<HeaderProps> = ({ currentRoute, currentSubRoute }) => {
         <SearchBar />
       </div>
       <div className='flex h-full items-center'>
-        <div className='flex items-center justify-center rounded-md mx-2 px-2 w-48 h-12 text-center bg-primary'>
+        <div className='flex items-center justify-center rounded-md mx-2 px-2 w-48 h-12 text-center bg-primary select-none cursor-pointer'>
           Upload wallpaper
         </div>
       </div>
