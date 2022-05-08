@@ -2,20 +2,21 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import ReactPaginate from 'react-paginate';
-import Image from '../../../@types/Image';
+import Role from '../../../@types/Role';
+import User from '../../../@types/User';
 import ImageHoverPreview from '../../../components/ImageHoverPreview';
 import AdminPanelLayout from '../../../components/Layout/AdminPanelLayout';
 import Table from '../../../components/Table';
 import { withAuth } from '../../../helpers/withAuth';
 import { getApi } from '../../../services/api';
 
-interface ImagesProps {
-  data: { content: any[]; totalPages: number; totalElements: number };
+interface UsersProps {
+  data: { content: User[]; totalPages: number; totalElements: number };
 }
 
-const Images = ({ data }: ImagesProps) => {
+const Users = ({ data }: UsersProps) => {
   const api = getApi();
-  const [currentItems, setCurrentItems] = useState<Image[]>(data.content);
+  const [users, setUsers] = useState<User[]>(data.content);
   const [numberOfPages, setNumberOfPages] = useState(data.totalPages);
   const router = useRouter();
 
@@ -36,12 +37,12 @@ const Images = ({ data }: ImagesProps) => {
       page: selected + 1,
     };
     const res = await api.get(`images`, { params });
-    setCurrentItems(res.data.content);
+    setUsers(res.data.content);
     setNumberOfPages(res.data.totalPages);
   };
 
   return (
-    <AdminPanelLayout currentRoute='/admin/images' title='Images'>
+    <AdminPanelLayout currentRoute='/admin/users' title='Users'>
       {/* {images.map((image, index) => {
         return <p key={image.id}>{image.title}</p>;
       })} */}
@@ -51,7 +52,7 @@ const Images = ({ data }: ImagesProps) => {
         </Link>
       </div>
       <Table
-        data={currentItems}
+        data={users}
         columns={[
           {
             property: `id`,
@@ -59,45 +60,38 @@ const Images = ({ data }: ImagesProps) => {
             columnClassname: `w-4 `,
             className: 'text-center',
           },
-          { property: `title`, label: `Title`, columnClassname: `` },
+          { property: `name`, label: `Name`, columnClassname: `` },
           {
-            property: `url`,
-            label: `Url`,
-            type: 'link',
+            property: `nickname`,
+            label: `Nickname`,
+            type: 'text',
             className: `whitespace-nowrap text-ellipisis`,
             columnClassname: `w-16`,
-            custom: (value) => {
-              // return (
-              //   <a
-              //     className='underline cursor-pointer text-blue-500'
-              //     target={'_blank'}
-              //     href={value}
-              //     rel='noreferrer'
-              //   >
-              //     Preview
-              //   </a>
-              // );
+          },
+          {
+            property: `roles`,
+            label: `Roles`,
+            type: 'text',
+            className: `whitespace-nowrap text-ellipisis`,
+            columnClassname: `w-16`,
+            custom: (item) => {
               return (
-                // <ImageHoverPreview imgUrl={value}>
-                <a
-                  className='underline cursor-pointer text-blue-500'
-                  target={'_blank'}
-                  href={value.url}
-                  rel='noreferrer'
-                >
-                  Preview
-                </a>
-                // </ImageHoverPreview>
+                <p>
+                  {item?.roles?.map((role, index) => {
+                    return index == item.roles.length ? (
+                      <p key={role.id}>{role.initials}, </p>
+                    ) : (
+                      <p key={role.id}>{role.initials}</p>
+                    );
+                  })}
+                </p>
               );
             },
           },
           {
-            property: `uploader`,
-            label: `Uploader`,
+            property: `email`,
+            label: `Email`,
             columnClassname: `w-1/4`,
-            custom: (item) => {
-              return <p>{item.uploader.name}</p>;
-            },
           },
         ]}
       />
@@ -125,18 +119,18 @@ const Images = ({ data }: ImagesProps) => {
   );
 };
 
-export default Images;
+export default Users;
 
 export const getServerSideProps = withAuth(
-  async (ctx: any): Promise<{ props: ImagesProps }> => {
-    console.log('chamou');
+  async (ctx: any): Promise<{ props: UsersProps }> => {
+    // console.log('chamou');
     const api = getApi(ctx);
     const page = ctx?.query?.page;
     const params = {
       size: 10,
       page: page || 1,
     };
-    const res = await api.get(`images`, { params });
+    const res = await api.get(`/users`, { params });
     return { props: { data: res.data } };
   }
 );

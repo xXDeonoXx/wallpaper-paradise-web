@@ -1,13 +1,13 @@
 import React, { HTMLAttributes } from 'react';
 import { get } from 'lodash';
 
-interface TableProps<T> {
+interface TableProps<T extends Record<string, any>> {
   data: T[];
   columns: {
     label: string;
     property: keyof T;
     type?: `text` | `link` | `custom`;
-    custom?: (value: any) => React.ReactNode;
+    custom?: (value: T) => React.ReactNode;
     className?: string;
     columnClassname?: string;
   }[];
@@ -46,9 +46,7 @@ const Table = <T,>({ data, columns }: TableProps<T>) => {
                       key={r as any}
                       className={`text-lg px-4 py-2 ${r.className}`}
                     >
-                      {r.custom
-                        ? r.custom(get(d, r.property))
-                        : get(d, r.property)}
+                      {r.custom ? r.custom(d) : get(d, r.property)}
                     </td>
                   );
                 })}

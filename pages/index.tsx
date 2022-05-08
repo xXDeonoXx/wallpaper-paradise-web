@@ -8,11 +8,10 @@ interface HomeProps {
 }
 
 const Home: NextPage<HomeProps> = ({ images }) => {
-  console.log(images);
   return (
     <PublicLayout>
       <div className={`w-full p-2`}>
-        <StackGrid columnWidth={200} appearDelay={500}>
+        <StackGrid columnWidth={200} appearDelay={50}>
           {images.content.map((image) => {
             return (
               <div
