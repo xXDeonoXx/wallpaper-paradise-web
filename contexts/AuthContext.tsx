@@ -1,5 +1,5 @@
 import Router from 'next/router';
-import { setCookie, parseCookies } from 'nookies';
+import { setCookie, parseCookies, destroyCookie } from 'nookies';
 import { createContext, useEffect, useState } from 'react';
 import { getApi } from '../services/api';
 
@@ -7,6 +7,7 @@ interface AuthContextProps {
   isAuthenticated: boolean;
   user: User | null;
   signIn: (email: string, password: string) => Promise<void>;
+  signOut: () => Promise<void>;
 }
 
 interface Role {
@@ -44,6 +45,7 @@ export const AuthProvider: React.FC = ({ children }) => {
 
       setCookie(undefined, 'access_token', access_token, {
         maxAge: 60 * 60 * 24 * 7, // 7 days
+        path: '/',
       });
 
       api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
@@ -53,8 +55,18 @@ export const AuthProvider: React.FC = ({ children }) => {
       Router.push('/admin/dashboard');
     } catch (error) {}
   };
+  const signOut = async () => {
+    try {
+      destroyCookie(undefined, 'access_token', { path: '/' });
+      Router.push('/login');
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
-    <AuthContext.Provider value={{ isAuthenticated: !!user, user, signIn }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated: !!user, user, signIn, signOut }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { string } from 'yup/lib/locale';
+import UserInfo from './UserInfo';
 
 interface HeaderProps {
   currentRoute?: string;
@@ -56,7 +57,7 @@ const Header: React.FC<HeaderProps> = ({ currentRoute, currentSubRoute }) => {
             >
               {data.subRoutes.map((data) => {
                 return (
-                  <div className='' role='none' key={data.toString()}>
+                  <div className='' role='none' key={data.route}>
                     <a
                       href={data.route}
                       className={`text-gray-700 block px-4 py-2 text-sm  ${
@@ -97,7 +98,9 @@ const Header: React.FC<HeaderProps> = ({ currentRoute, currentSubRoute }) => {
           })}
         </div>
       </div>
-      <div>right</div>
+      <div className='z-40'>
+        <UserInfo />
+      </div>
     </nav>
   );
 };

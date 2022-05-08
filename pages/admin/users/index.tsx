@@ -46,10 +46,10 @@ const Users = ({ data }: UsersProps) => {
       {/* {images.map((image, index) => {
         return <p key={image.id}>{image.title}</p>;
       })} */}
-      <div className='w-full py-4 justify-end flex'>
-        <Link href={'/admin/images/create'}>
-          <a className='text-primary font-semibold'>UPLOAD IMAGE</a>
-        </Link>
+      <div className='w-full py-8 justify-end flex'>
+        {/* <Link href={'/admin/users/create'}>
+          <a className='text-primary font-semibold'>CREATE USER</a>
+        </Link> */}
       </div>
       <Table
         data={users}
